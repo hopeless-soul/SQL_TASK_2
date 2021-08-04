@@ -15,7 +15,7 @@ class Dashboard {
 
     defaultTable = "default_tasks";
     async getDachboard(){
-        const { rows } = await db.poolTasks.query('SELECT COUNT(id) FROM ' + this.defaultTable + ' WHERE dueDate BETWEEN \'2021-08-04\' AND \'2021-08-04\'');
+        const { rows } = await db.poolTasks.query('SELECT COUNT(id) FROM ' + this.defaultTable + ' WHERE checked = false  AND dueDate BETWEEN \'2021-08-04\' AND \'2021-08-04\' ');
         return rows[0];
     }
 
