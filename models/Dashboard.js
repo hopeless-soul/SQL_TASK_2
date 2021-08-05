@@ -14,13 +14,15 @@ const db = require('../db');
 class Dashboard {
 
     async getDashboard(){
-        let uncompletedForToday = await db.knex('t_tasks').count('id_task').where('checked',false).whereBetween('duedate', ['2021-08-05', '2021-08-05'])
 
-        let allUncompleted = await db.knex('public.t_lists').select('public.t_lists.id_list as id', 'public.t_lists.name_list as name').count('public.t_tasks.checked as uncompleted')
-            .rightJoin('public.t_tasks', 'public.t_lists.id_list', 'public.t_tasks.id_list').where("public.t_tasks.checked",false).groupBy("public.t_lists.id_list", "public.t_lists.name_list")
+        let allUncompleted = await db.knex('public.t_lists').select('public.t_lists.id_list as id', 'public.t_lists.name_list as name')
+            .count('public.t_tasks.checked as uncompleted')
+            .rightJoin('public.t_tasks', 'public.t_lists.id_list', 'public.t_tasks.id_list')
+            .where("public.t_tasks.checked",false).whereBetween('duedate', ['2021-08-05', '2021-08-05'])
+            .groupBy("public.t_lists.id_list", "public.t_lists.name_list")
             .orderBy('public.t_lists.id_list');   
 
-        return [uncompletedForToday[0], allUncompleted];
+        return allUncompleted;
     }
 
 }
