@@ -3,7 +3,7 @@
 
     [X] Count of Uncompleted tasks for today
         |||  Использовать SQL BETWEEN по dueDate, и COUNT. 
-    [ ] Uncomplete task from each lists
+    [X] Uncomplete task from each lists
         |||  Для подсчета количества задач использовать GROUP BY и COUNT в SQL
         |||  Информацию про список получить в том-же запросе используя RIGHT JOIN
         |||  (ответ также должен содержать списки без задач). 
