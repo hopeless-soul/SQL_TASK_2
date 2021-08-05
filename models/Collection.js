@@ -9,14 +9,9 @@ const db = require('../db');
 
 class Collection{
     async forToday(){
-        let result;
-        await db.poolTasks.query(
-            "SELECT public.t_tasks.id_task AS id, public.t_tasks.name_task AS name, public.t_lists.name_list AS list, public.t_lists.id_list AS listid " +
-            "FROM public.t_tasks " +
-            "INNER JOIN public.t_lists ON public.t_tasks.id_list = public.t_lists.id_list " +
-            "WHERE duedate BETWEEN '2021-08-05' AND '2021-08-05' "
-        ).then(res=>result=res.rows)
-        return result;
+        return await db.knex('public.t_tasks').select('public.t_tasks.id_task as id', 'public.t_tasks.name_task as name', 'public.t_lists.name_list as list', 'public.t_lists.id_list as listid')
+            .innerJoin('public.t_lists', 'public.t_tasks.id_list', 'public.t_lists.id_list')
+            .whereBetween('duedate', ['2021-08-05', '2021-08-05'])
     }
 }
 
