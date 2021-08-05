@@ -14,7 +14,6 @@ const db = require('../db');
 class Dashboard {
 
     async getDachboard(){
-        
         let uncompletedForToday;
         await db.poolTasks.query("SELECT COUNT(id_task) FROM t_tasks WHERE checked=false AND dueDate BETWEEN '2021-08-05' AND '2021-08-05'")
         .then((res)=>{uncompletedForToday = res.rows[0]});

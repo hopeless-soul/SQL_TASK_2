@@ -1,10 +1,12 @@
 const express = require('express')
 const router = express.Router();
 
-const tasks = require('./tasks')
+// const tasks = require('./tasks')
+const lists = require('./lists')
 const dashboard = require('./dashboard')
 
-router.use('/tasks', tasks)
+// router.use('/tasks', tasks)
+router.use('/lists', lists)
 router.use('/dashboard', dashboard)
 
 router.use(express.urlencoded({ extended: true }));
