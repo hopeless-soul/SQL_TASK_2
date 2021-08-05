@@ -14,46 +14,58 @@ function logResult(res){
     console.log("res.command >>>", res.command);
     console.log("=================================");
 }
-function genTasksInsertRow(count, tableName){
-    let taskNames = ["Lorem ipsum", "Dolor sit amet", "Consectetur", "Adipiscing elit", "Sed laoreet felis arcu", "Id maximus", "Elit", "Ornare e"];
-    let taskDescs = ["Fusce vulputate", "Ut lectus", "In convallis", "Fusce semper", "Vestibulum magna", "A dapibus", "Morbi nisi", "Turpis", "Laoreet nec sapien sit", "Amet", "Aliquam"];
-    let queryHead = `INSERT INTO ${tableName} VALUES `; 
-    let ids = [], names = [], descs = [], checked = [], dueDates = [];
+function genTasksInsertRow(tasks, lists){
+    let taskNames = ["Lorem ipsum", "Dolor sit amet", "Consectetur", "Adipiscing elit", "Sed laoreet felis arcu", "Id maximus", "Elit", "Ornare e", "Fusce vulputate", "Ut lectus", "In convallis", "Fusce semper", "Vestibulum magna", "A dapibus", "Morbi nisi", "Turpis", "Laoreet nec sapien sit", "Amet", "Aliquam"];
     function getRandomIntInclusive(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-    for(let i=0; i<count; i++){
-        
-        queryHead += "(";
-        queryHead += `$${i+1},`; // ID
-        queryHead += `$${i+1+count},`; // NAME
-        queryHead += `$${i+1+count+count},`; // DESC
-        queryHead += `$${i+1+count+count+count},`; // CHECKED
-        queryHead += `$${i+1+count+count+count+count} `; // DUEDATE
-        
-        queryHead += ")";
-        if(i!=count-1){queryHead += ","}
 
-        ids.push(i+1);
-        names.push(taskNames[Math.floor(Math.random() * taskNames.length)]);
-        descs.push(taskDescs[Math.floor(Math.random() * taskDescs.length)]);
-        checked.push(false);
-
-        now = new Date();
-        now.setDate(getRandomIntInclusive(now.getDate()-2,now.getDate()+2));
-        dueDates.push(now);
-
+    let queryHead = `INSERT INTO t_tasks VALUES `; 
+    let argumentIndex = 1;
+    let args = [];
+    for(let i=0; i<lists; i++){
+        for(let j=0; j<tasks; j++){
+            queryHead += "(";
+            queryHead += `$${argumentIndex},`; argumentIndex++ // ID_TASK
+            queryHead += `$${argumentIndex},`; argumentIndex++ // NAME_TASK
+            queryHead += `$${argumentIndex},`; argumentIndex++ // DUE_DATE
+            queryHead += `$${argumentIndex},`; argumentIndex++ // ID_LIST
+            queryHead += `$${argumentIndex}` ; argumentIndex++ // CHECKED
+            queryHead += "),";
+            // if(i!=lists && j!=tasks-1){queryHead += ","}
+            args.push(j+1); // ID_TASK
+            args.push(taskNames[getRandomIntInclusive(0,taskNames.length-1)]); // NAME_TASK
+            let now = new Date();
+            now.setDate(getRandomIntInclusive(now.getDate()-2,now.getDate()+2));
+            args.push(now); // DUE_DATE
+            args.push(i+1); // ID_LIST
+            args.push(getRandomIntInclusive(0,1)==0 ? true : false); // CHECKED
+        }   
     }
-    console.log(queryHead);
-    return [queryHead, ids.concat(names, descs, checked, dueDates)];
+    queryHead = queryHead.slice(0, -1); 
+    
+    
+
+        // ids.push(i+1);
+        // names.push(taskNames[Math.floor(Math.random() * taskNames.length)]);
+        // descs.push(taskDescs[Math.floor(Math.random() * taskDescs.length)]);
+        // checked.push(false);
+
+        // now = new Date();
+        // now.setDate(getRandomIntInclusive(now.getDate()-2,now.getDate()+2));
+        // dueDates.push(now);
+
+    
+    // console.log(queryHead);
+    return [queryHead, args];
 }
 
-let tableName = "taskslist1";
 
 client
-    .query("DELETE FROM " + tableName).then(res => logResult(res) )
+    .query("DELETE FROM t_tasks").then(res => logResult(res) )
 
     
     
-let [queryRow, queryValues] = genTasksInsertRow(13, tableName);
+let [queryRow, queryValues] = genTasksInsertRow(5,4);
+console.log([queryRow, queryValues]);
 client
     .query({
         name: 'Insert tasks.',
@@ -63,6 +75,6 @@ client
 
 
 client
-    .query('SELECT * FROM ' + tableName)
+    .query('SELECT * FROM t_tasks')
     .then(res => logResult(res) )
     .then( ()=>client.end() )

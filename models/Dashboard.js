@@ -13,7 +13,6 @@ const db = require('../db');
 
 class Dashboard {
 
-    defaultTable = "default_tasks";
     async getDachboard(){
         
         let uncompletedForToday;
@@ -43,10 +42,10 @@ module.exports = Dashboard;
 
 
 
-async function f1() {
-    var x = await new Dashboard().getDachboard()
-    console.log(x); // 10
-    console.log("DONE"); // 10
-  }
-f1();
+// async function f1() {
+//     var x = await new Dashboard().getDachboard()
+//     console.log(x); // 10
+//     console.log("DONE"); // 10
+//   }
+// f1();
 
