@@ -1,6 +1,6 @@
 const Dashboard = require('../models/Dashboard');
 
 const dashboardController = {
-    async getDachboard(){ return await new Dashboard().getDachboard() }
+    async getDashboard(){ return await new Dashboard().getDashboard() }
 }
 module.exports = dashboardController;
