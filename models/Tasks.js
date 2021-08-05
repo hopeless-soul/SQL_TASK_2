@@ -2,34 +2,18 @@ const db = require('../db');
 
 class Tasks {
     async getUncompletedTasks( listId ){ 
-        const { rows } = await db.poolTasks.query(
-            "SELECT public.t_tasks.id_task AS id, public.t_tasks.name_task AS name, public.t_tasks.checked " +
-            "FROM public.t_tasks " +
-            "WHERE checked = false AND public.t_tasks.id_list=$1 ", [listId]
-        );
-        return rows;
+        return await db.knex.select('public.t_tasks.id_task as id', 'public.t_tasks.name_task as name', 'public.t_tasks.checked')
+            .from('public.t_tasks').where({'checked': false, 'public.t_tasks.id_list': listId})
     }
     async getAllTasks( listId ){
-        const { rows } = await db.poolTasks.query(
-            "SELECT public.t_tasks.id_task AS id, public.t_tasks.name_task AS name, public.t_tasks.checked " +
-            "FROM public.t_tasks " +
-            "WHERE public.t_tasks.id_list=$1 ", [listId]
-        );
-        return rows;
+        return await db.knex.select('public.t_tasks.id_task as id', 'public.t_tasks.name_task as name', 'public.t_tasks.checked')
+            .from('public.t_tasks').where('public.t_tasks.id_list',listId)
     }
     async addEntry( listId, taskId, taskName, dueDate, isChecked ){
-        const { rows } = await db.poolTasks.query(
-            "INSERT INTO public.t_tasks " +
-            "VALUES ( $1, $2, $3, $4, $5  ) ", [taskId, taskName, dueDate, listId, isChecked]
-        )
-        return rows;
+        return await db.knex('public.t_tasks').insert({'id_list': listId, 'name_task': taskName, 'duedate': `${dueDate.getFullYear()}-${dueDate.getMonth()}-${dueDate.getDate()}`, 'id_task': taskId, 'checked': isChecked})
     }
     async removeEntry( listId, taskId ){
-        const { rows } = await db.poolTasks.query(
-            "DELETE FROM public.t_tasks " +
-            "WHERE public.t_tasks.id_list = $1 AND public.t_tasks.id_task = $2 ", [listId, taskId]
-        )
-        return rows;   
+        return await db.knex('public.t_tasks').where({'public.t_tasks.id_list' : listId , 'public.t_tasks.id_task' : taskId }).del();   
     }
     async updateEntry( tableName, id, newId=undefined, name=undefined, desc=undefined, isChecked=undefined ){
         // let str = 'UPDATE ' + tableName + ' SET ' +  
