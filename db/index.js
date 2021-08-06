@@ -24,7 +24,7 @@ const sqTasks = sequelize.define('sqTasks', {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    dudate : {
+    duedate : {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: new Date()
@@ -51,9 +51,14 @@ const sqLists = sequelize.define('sqLists', {
         allowNull: false,
     }
 }, {
+    underscored: true,
     tableName: 'st_lists'
 })
 sequelize.sync()
+
+// sqLists.hasMany(sqTasks, {foreignKey:   "id_list"});
+// sqTasks.belongsTo(sqLists, {foreignKey: "id_list"});
+
 
 //SECTION: POSTGRES
 const {Pool, Client} = require('pg');
@@ -86,6 +91,8 @@ const pool_tasks = new Pool({
 
 //EXPORTS:
 module.exports.sequelize = sequelize;
+module.exports.sqTasks = sqTasks;
+module.exports.sqLists = sqLists;
 module.exports.knex = knex;
 module.exports.poolTasks = pool_tasks;
 module.exports.poolBirthdays = pool_birthdays;
