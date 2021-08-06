@@ -11,6 +11,20 @@ const knex = require('knex')({
     }
 });
 
+
+
+const { Sequelize } = require('sequelize');
+const sequelize = new Sequelize('postgres://user1:1@localhost:5432/tasks');
+
+( async ()=>{ //INFO: TEST CONNECTION
+    try {
+        await sequelize.authenticate();
+        console.log('Connection has been established successfully.');
+    } catch (error) {
+        console.error('Unable to connect to the database:', error);
+    }   
+})();
+
 const pool_birthdays = new Pool({
     user: 'user1',
     host: 'localhost',
@@ -31,3 +45,4 @@ const pool_tasks = new Pool({
 module.exports.poolBirthdays = pool_birthdays;
 module.exports.poolTasks = pool_tasks;
 module.exports.knex = knex;
+module.exports.sequelize = sequelize;
