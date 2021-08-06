@@ -1,5 +1,7 @@
 const db = require('../db');
 
+
+
 class Tasks {
     async getUncompletedTasks( listId ){ 
         return await db.knex.select('public.t_tasks.id_task as id', 'public.t_tasks.name_task as name', 'public.t_tasks.checked')
