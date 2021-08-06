@@ -42,18 +42,6 @@ function genTasksInsertRow(tasks, lists){
     }
     queryHead = queryHead.slice(0, -1); 
     
-    
-
-        // ids.push(i+1);
-        // names.push(taskNames[Math.floor(Math.random() * taskNames.length)]);
-        // descs.push(taskDescs[Math.floor(Math.random() * taskDescs.length)]);
-        // checked.push(false);
-
-        // now = new Date();
-        // now.setDate(getRandomIntInclusive(now.getDate()-2,now.getDate()+2));
-        // dueDates.push(now);
-
-    
     // console.log(queryHead);
     return [queryHead, args];
 }
